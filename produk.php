@@ -3,64 +3,49 @@ class Produk
 {
     private $conn;
 
-    public function __construct($conn)
+    public function __construct()
     {
-        $this->conn = $conn;
+        $this->conn = new PDO('mysql:host=localhost;dbname=malang', 'root', '');
     }
 
     public function getAllProduk()
     {
-        $query = "SELECT * FROM produk";
-        $result = $this->conn->query($query);
-
-        $data = array();
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $data[] = $row;
-            }
-        }
-
-        return $data;
+        $query = 'SELECT * FROM produk';
+        $stmt = $this->conn->query($query);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getProdukById($id)
+    public function getProdukByKode($kode)
     {
-        $query = "SELECT * FROM produk WHERE id = ?";
+        $query = 'SELECT * FROM produk WHERE kode = :kode';
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("i", $id);
+        $stmt->bindParam(':kode', $kode);
         $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows > 0) {
-            return $result->fetch_assoc();
-        }
-
-        return null;
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function saveOrUpdateProduk($id, $kode, $nama, $harga, $expired_date)
+    public function saveOrUpdateProduk($data)
     {
-        $status = ($expired_date < date('Y-m-d')) ? "Expired" : "Aktif";
-
-        if (empty($id)) {
-            $query = "INSERT INTO produk (kode, nama, harga, expired_date, status) VALUES (?, ?, ?, ?, ?)";
-            $stmt = $this->conn->prepare($query);
-            $stmt->bind_param("ssdss", $kode, $nama, $harga, $expired_date, $status);
+        if (isset($data['kode'])) {
+            $query = 'UPDATE produk SET nama = :nama, harga = :harga, expired_date = :expired_date WHERE kode = :kode';
         } else {
-            $query = "UPDATE produk SET kode = ?, nama = ?, harga = ?, expired_date = ?, status = ? WHERE id = ?";
-            $stmt = $this->conn->prepare($query);
-            $stmt->bind_param("ssdssi", $kode, $nama, $harga, $expired_date, $status, $id);
+            $query = 'INSERT INTO produk (kode, nama, harga, expired_date) VALUES (:kode, :nama, :harga, :expired_date)';
         }
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':kode', $data['kode']);
+        $stmt->bindParam(':nama', $data['nama']);
+        $stmt->bindParam(':harga', $data['harga']);
+        $stmt->bindParam(':expired_date', $data['expired_date']);
 
         return $stmt->execute();
     }
 
-    public function deleteProduk($id)
+    public function deleteProduk($kode)
     {
-        $query = "DELETE FROM produk WHERE id = ?";
+        $query = 'DELETE FROM produk WHERE kode = :kode';
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("i", $id);
+        $stmt->bindParam(':kode', $kode);
         return $stmt->execute();
     }
 }
-?>

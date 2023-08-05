@@ -1,20 +1,23 @@
 <?php
-class Database
-{
+class Database {
+    // Sesuaikan dengan koneksi database Anda
     private $host = "localhost";
+    private $db_name = "malang";
     private $username = "root";
     private $password = "";
-    private $db_name = "malang"; 
+    public $conn;
 
-    public function getConnection()
-    {
-        $conn = new mysqli($this->host, $this->username, $this->password, $this->db_name);
+    public function getConnection() {
+        $this->conn = null;
 
-        if ($conn->connect_error) {
-            die("Koneksi gagal: " . $conn->connect_error);
+        try {
+            $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->username, $this->password);
+            $this->conn->exec("set names utf8");
+        } catch (PDOException $exception) {
+            echo "Koneksi database gagal: " . $exception->getMessage();
         }
 
-        return $conn;
+        return $this->conn;
     }
 }
 ?>

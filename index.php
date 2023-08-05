@@ -1,52 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRUD Produk</title>
-    <!-- Gaya CSS Bootstrap 5 -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
-    <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-    }
-
-    h1 {
-        text-align: center;
-        margin-bottom: 30px;
-    }
-
-    .form-container {
-        max-width: 800px;
-        margin: 0 auto;
-        background-color: #f8f9fa;
-        padding: 20px;
-        border-radius: 5px;
-    }
-
-    .table-container {
-        max-width: 1000px;
-        margin: 0 auto;
-    }
-    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
     <div class="container">
-        <h1>CRUD Produk</h1>
-
-        <!-- Form untuk menambahkan/mengubah produk -->
-        <div class="form-container mb-4">
-            <h2 class="mb-4">Tambah Produk</h2>
-            <form action="tambah_produk.php">
-                <button type="submit" class="btn btn-primary">Tambah Produk Baru</button>
-            </form>
+        <div class="header d-flex justify-content-between align-items-center mb-4">
+            <h1 class="mb-0">CRUD Produk</h1>
+            <a href="tambah_produk.php" class="btn btn-primary"><i class="fas fa-plus-circle me-2"></i> Tambah Produk
+                Baru</a>
         </div>
+        <br>
 
-        <!-- Tabel untuk menampilkan data produk -->
-        <div class="table-container">
-            <h2 class="mb-4">Data Produk</h2>
-            <table class="table table-bordered">
+        <?php
+        require_once 'produk.php';
+
+        $produk = new Produk();
+        $data = $produk->getAllProduk();
+        ?>
+
+        <?php if ($data) : ?>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
                         <th>Kode</th>
@@ -58,52 +39,32 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Data produk akan di-generate secara dinamis menggunakan PHP -->
-                    <?php
-                    require_once 'koneksi.php';
-                    require_once 'produk.php';
-
-                    // Inisialisasi koneksi database
-                    $db = new Database();
-                    $conn = $db->getConnection();
-
-                    // Inisialisasi objek produk
-                    $produk = new Produk($conn);
-
-                    // Ambil data produk dari database
-                    $dataProduk = $produk->getAllProduk();
-
-                    // Tampilkan data produk dalam tabel
-                    foreach ($dataProduk as $row) {
-                        echo "<tr>";
-                        echo "<td>" . $row['kode'] . "</td>";
-                        echo "<td>" . $row['nama'] . "</td>";
-                        echo "<td>" . $row['harga'] . "</td>";
-                        echo "<td>" . $row['expired_date'] . "</td>";
-                        echo "<td>" . $row['status'] . "</td>";
-                        echo '<td>
-                                <form action="edit_produk.php" method="post" style="display: inline-block;">
-                                    <input type="hidden" name="id" value="' . $row['id'] . '">
-                                    <button type="submit" class="btn btn-warning">Edit</button>
-                                </form>
-                                <form action="aksi_produk.php" method="post" style="display: inline-block;">
-                                    <input type="hidden" name="id" value="' . $row['id'] . '">
-                                    <input type="hidden" name="aksi" value="hapus">
-                                    <button type="submit" class="btn btn-danger">Hapus</button>
-                                </form>
-                            </td>';
-                        echo "</tr>";
-                    }
-                    ?>
+                    <?php foreach ($data as $produk) : ?>
+                    <tr>
+                        <td><?= $produk['kode']; ?></td>
+                        <td><?= $produk['nama']; ?></td>
+                        <td><?= $produk['harga']; ?></td>
+                        <td><?= $produk['expired_date']; ?></td>
+                        <td><?= $produk['status']; ?></td>
+                        <td>
+                            <a href="edit_produk.php?kode=<?= $produk['kode']; ?>"
+                                class="btn btn-secondary btn-sm">Edit</a>
+                            <a href="aksi_produk.php?action=delete&kode=<?= $produk['kode']; ?>"
+                                class="btn btn-danger btn-sm">Hapus</a>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
+        <?php else : ?>
+        <div class="alert alert-info">
+            Tidak ada data produk.
+        </div>
+        <?php endif; ?>
     </div>
 
-    <!-- Script Bootstrap 5 dan JavaScript untuk mempercantik halaman -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/your-font-awesome-kit.js" crossorigin="anonymous"></script>
 </body>
 
 </html>

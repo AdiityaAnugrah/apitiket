@@ -1,38 +1,42 @@
 <?php
-require_once 'koneksi.php';
 require_once 'produk.php';
 
-// Inisialisasi koneksi database
-$db = new Database();
-$conn = $db->getConnection();
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['action'])) {
+        $produk = new Produk();
 
-// Inisialisasi objek produk
-$produk = new Produk($conn);
+        $kode = $_POST['kode'];
+        $nama = $_POST['nama'];
+        $harga = $_POST['harga'];
+        $expired_date = $_POST['expired_date'];
 
-// Aksi Tambah/Ubah Produk
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = isset($_POST['id']) ? $_POST['id'] : null;
-    $kode = isset($_POST['kode']) ? $_POST['kode'] : '';
-    $nama = isset($_POST['nama']) ? $_POST['nama'] : '';
-    $harga = isset($_POST['harga']) ? $_POST['harga'] : 0;
-    $expired_date = isset($_POST['expired_date']) ? $_POST['expired_date'] : '';
-
-    // Jika id tidak kosong, berarti ini adalah permintaan untuk mengubah produk
-    if (!empty($id)) {
-        $produk->saveOrUpdateProduk($id, $kode, $nama, $harga, $expired_date);
-    } else {
-        // Jika id kosong, berarti ini adalah permintaan untuk menambah produk baru
-        $produk->saveOrUpdateProduk(null, $kode, $nama, $harga, $expired_date);
+        if ($_POST['action'] == 'add') {
+            $produk->saveOrUpdateProduk([
+                'kode' => $kode,
+                'nama' => $nama,
+                'harga' => $harga,
+                'expired_date' => $expired_date,
+                'status' => 'Active'
+            ]);
+            header('Location: index.php');
+            exit();
+        } elseif ($_POST['action'] == 'update') {
+            $produk->saveOrUpdateProduk([
+                'kode' => $kode,
+                'nama' => $nama,
+                'harga' => $harga,
+                'expired_date' => $expired_date,
+                'status' => 'Active'
+            ]);
+            header('Location: index.php');
+            exit();
+        }
+    }
+} elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['kode'])) {
+        $produk = new Produk();
+        $produk->deleteProduk($_GET['kode']);
+        header('Location: index.php');
+        exit();
     }
 }
-
-// Aksi Hapus Produk
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aksi']) && $_POST['aksi'] === 'hapus') {
-    $id = isset($_POST['id']) ? $_POST['id'] : null;
-    $produk->deleteProduk($id);
-}
-
-// Redirect kembali ke halaman utama setelah melakukan operasi CRUD
-header("Location: index.php");
-exit;
-?>
