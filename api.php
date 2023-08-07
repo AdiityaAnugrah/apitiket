@@ -7,11 +7,8 @@ $conn = $database->getConnection();
 
 $produk = new Produk($conn);
 
-// Mendapatkan parameter dari permintaan
 $action = isset($_GET['action']) ? $_GET['action'] : '';
-$kode = isset($_GET['kode']) ? $_GET['kode'] : '';
 
-// Menggunakan switch untuk menangani berbagai tipe permintaan
 switch ($action) {
     case 'all':
         $data = $produk->getAllProduk();
@@ -20,12 +17,13 @@ switch ($action) {
             echo json_encode($data);
         } else {
             http_response_code(404);
-            echo json_encode(array("message" => "Tidak ada data produk."));
+            echo json_encode(array("message" => "Data produk tidak ditemukan."));
         }
         break;
 
-    case 'get':
-        if (!empty($kode)) {
+    case 'detail':
+        $kode = isset($_GET['kode']) ? $_GET['kode'] : '';
+        if ($kode != '') {
             $data = $produk->getProdukByKode($kode);
             if ($data) {
                 http_response_code(200);
@@ -36,25 +34,33 @@ switch ($action) {
             }
         } else {
             http_response_code(400);
-            echo json_encode(array("message" => "Parameter kode produk diperlukan."));
+            echo json_encode(array("message" => "Parameter kode tidak valid."));
         }
         break;
 
     case 'paging':
-        $page = isset($_GET['page']) ? $_GET['page'] : 1;
-        $limit = isset($_GET['limit']) ? $_GET['limit'] : 10;
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
+
+        if ($page <= 0 || $limit <= 0) {
+            http_response_code(400);
+            echo json_encode(array("message" => "Parameter halaman (page) dan batas (limit) harus lebih dari 0."));
+            break;
+        }
+
         $data = $produk->getAllProdukPaging($page, $limit);
         if ($data) {
             http_response_code(200);
             echo json_encode($data);
         } else {
             http_response_code(404);
-            echo json_encode(array("message" => "Tidak ada data produk."));
+            echo json_encode(array("message" => "Data produk tidak ditemukan."));
         }
         break;
 
     case 'delete':
-        if (!empty($kode)) {
+        $kode = isset($_GET['kode']) ? $_GET['kode'] : '';
+        if ($kode != '') {
             $result = $produk->deleteProduk($kode);
             if ($result) {
                 http_response_code(200);
@@ -65,7 +71,7 @@ switch ($action) {
             }
         } else {
             http_response_code(400);
-            echo json_encode(array("message" => "Parameter kode produk diperlukan."));
+            echo json_encode(array("message" => "Parameter kode tidak valid."));
         }
         break;
 
