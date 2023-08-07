@@ -1,4 +1,4 @@
-# apitiket
+# API PRODUK
 
 APi sebuah tiket dengan menggunakan PHP Native OOP
 
@@ -31,3 +31,9 @@ Endpoint: http://localhost/apitiket/api.php?action=delete&kode={kode_produk}
 Method: GET
 Parameter GET: kode (kode produk yang ingin dihapus)
 Deskripsi: Endpoint ini digunakan untuk menghapus data produk berdasarkan kode. Data yang dihapus dapat direstore kembali suatu saat.
+
+## Peringatan!
+
+Proyek ini mengandung berbagai bagian yang mungkin diambil dari berbagai pihak, dan penggunaan materi dari sumber eksternal dapat berlaku. Harap diperhatikan bahwa:
+
+---
