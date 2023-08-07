@@ -14,7 +14,7 @@
 <body>
     <div class="container">
         <div class="header d-flex justify-content-between align-items-center mb-4">
-            <h1 class="mb-0">CRUD Produk</h1>
+            <h1 class="mb-0">DATA PRODUK</h1>
             <a href="tambah_produk.php" class="btn btn-primary"><i class="fas fa-plus-circle me-2"></i> Tambah Produk
                 Baru</a>
         </div>
