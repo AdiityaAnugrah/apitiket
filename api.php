@@ -1,85 +1,76 @@
 <?php
-
-
+require_once 'koneksi.php';
 require_once 'produk.php';
 
-$produk = new Produk();
+$database = new Database();
+$conn = $database->getConnection();
 
-// Endpoint untuk membaca list data produk dengan paging
-if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['page']) && isset($_GET['limit'])) {
-$page = $_GET['page'];
-$limit = $_GET['limit'];
+$produk = new Produk($conn);
 
-// Validasi page dan limit harus bilangan bulat positif
-if (!is_numeric($page) || !is_numeric($limit) || $page <= 0 || $limit <=0) { http_response_code(400); echo
-    json_encode(array('message'=> 'Invalid page or limit parameter'));
-    exit();
-    }
+// Mendapatkan parameter dari permintaan
+$action = isset($_GET['action']) ? $_GET['action'] : '';
+$kode = isset($_GET['kode']) ? $_GET['kode'] : '';
 
-    $data = $produk->getAllProdukPaging($page, $limit);
+// Menggunakan switch untuk menangani berbagai tipe permintaan
+switch ($action) {
+    case 'all':
+        $data = $produk->getAllProduk();
+        if ($data) {
+            http_response_code(200);
+            echo json_encode($data);
+        } else {
+            http_response_code(404);
+            echo json_encode(array("message" => "Tidak ada data produk."));
+        }
+        break;
 
-    // Jika data kosong, kirim response 404 Not Found
-    if (empty($data)) {
-    http_response_code(404);
-    echo json_encode(array('message' => 'No products found'));
-    exit();
-    }
+    case 'get':
+        if (!empty($kode)) {
+            $data = $produk->getProdukByKode($kode);
+            if ($data) {
+                http_response_code(200);
+                echo json_encode($data);
+            } else {
+                http_response_code(404);
+                echo json_encode(array("message" => "Produk tidak ditemukan."));
+            }
+        } else {
+            http_response_code(400);
+            echo json_encode(array("message" => "Parameter kode produk diperlukan."));
+        }
+        break;
 
-    // Kirim response dengan data produk
-    http_response_code(200);
-    echo json_encode($data);
-    exit();
-    }
+    case 'paging':
+        $page = isset($_GET['page']) ? $_GET['page'] : 1;
+        $limit = isset($_GET['limit']) ? $_GET['limit'] : 10;
+        $data = $produk->getAllProdukPaging($page, $limit);
+        if ($data) {
+            http_response_code(200);
+            echo json_encode($data);
+        } else {
+            http_response_code(404);
+            echo json_encode(array("message" => "Tidak ada data produk."));
+        }
+        break;
 
-    // Endpoint untuk menghapus produk
-if ($_SERVER['REQUEST_METHOD'] == 'DELETE' && isset($_GET['kode'])) {
-    $kode = $_GET['kode'];
+    case 'delete':
+        if (!empty($kode)) {
+            $result = $produk->deleteProduk($kode);
+            if ($result) {
+                http_response_code(200);
+                echo json_encode(array("message" => "Produk berhasil dihapus."));
+            } else {
+                http_response_code(500);
+                echo json_encode(array("message" => "Gagal menghapus produk."));
+            }
+        } else {
+            http_response_code(400);
+            echo json_encode(array("message" => "Parameter kode produk diperlukan."));
+        }
+        break;
 
-    // Cek apakah produk dengan kode tersebut ada dalam database
-    $produkData = $produk->getProdukByKode($kode);
-    if (!$produkData) {
-        http_response_code(404);
-        echo json_encode(array('message' => 'Product not found'));
-        exit();
-    }
-
-    // Lakukan soft delete produk
-    $produk->deleteProduk($kode);
-
-    http_response_code(200);
-    echo json_encode(array('message' => 'Product deleted successfully'));
-    exit();
+    default:
+        http_response_code(400);
+        echo json_encode(array("message" => "Permintaan tidak valid."));
 }
-
-// Endpoint untuk mencari produk berdasarkan kode produk
-if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['kode'])) {
-    $kode = $_GET['kode'];
-
-    $produkData = $produk->getProdukByKode($kode);
-
-    if ($produkData) {
-        http_response_code(200);
-        echo json_encode($produkData);
-    } else {
-        http_response_code(404);
-        echo json_encode(array('message' => 'Product not found'));
-    }
-    exit();
-}
-
-// Endpoint untuk mencari produk berdasarkan QR code
-if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['qrcode'])) {
-    $qrcode = $_GET['qrcode'];
-
-    $produkData = $produk->getProdukByQRCode($qrcode);
-
-    if ($produkData) {
-        http_response_code(200);
-        echo json_encode($produkData);
-    } else {
-        http_response_code(404);
-        echo json_encode(array('message' => 'Product not found'));
-    }
-    exit();
-}
-    ?>
+?>

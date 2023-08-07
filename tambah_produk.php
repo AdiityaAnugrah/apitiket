@@ -7,12 +7,20 @@
     <title>Tambah Produk</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
-    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
 </head>
 
 <body>
     <div class="container">
-        <h2 class="mb-4">Tambah Produk</h2>
+        <div class="header d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">Tambah Produk</h2>
+
+        </div>
+        <br>
+
         <form action="aksi_produk.php" method="post">
             <div class="form-group">
                 <label for="kode">Kode Produk</label>
@@ -24,12 +32,7 @@
             </div>
             <div class="form-group">
                 <label for="harga">Harga Produk</label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Rp</span>
-                    </div>
-                    <input type="text" id="harga" name="harga" required>
-                </div>
+                <input type="text" id="harga" name="harga" required>
             </div>
             <div class="form-group">
                 <label for="expired_date">Expired Date</label>
@@ -37,19 +40,24 @@
             </div>
             <div class="form-group">
                 <label for="status">Status</label>
-                <select id="status" name="status" required>
-                    <option value="Active">Active</option>
-                    <option value="Expired">Expired</option>
+                <select name="status" id="status" required>
+                    <option value="">Pilih Status</option>
+                    <option value="aktif">Aktif</option>
+                    <option value="expired">Expired</option>
                 </select>
             </div>
             <div class="btn-container">
-                <button type="submit" name="action" value="add" class="btn btn-primary"><i class="fas fa-save"></i>
-                    Tambah Produk</button>
+                <button type="submit" name="action" value="add" class="btn btn-primary">Simpan</button>
                 <a href="index.php" class="btn btn-back"><i class="fas fa-chevron-left me-2"></i> Kembali</a>
             </div>
         </form>
     </div>
-    <script src="https://kit.fontawesome.com/your-font-awesome-kit.js" crossorigin="anonymous"></script>
+
+    <!-- Script untuk Font Awesome dan SweetAlert2 -->
+    <!-- Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
 </body>
 
 </html>

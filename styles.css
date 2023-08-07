@@ -1,3 +1,5 @@
+/* styles.css */
+
 /* Global Styles */
 
 body {
@@ -16,9 +18,6 @@ body {
 /* Button Styles */
 
 .btn {
-  display: inline-block;
-  font-size: 16px;
-  font-weight: bold;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -71,6 +70,7 @@ body {
 /* Table Styles */
 
 .table {
+  background-color: #fff;
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 30px;
@@ -82,9 +82,6 @@ body {
 .table td {
   padding: 12px;
   border: 1px solid #dee2e6;
-}
-.table td.date {
-  white-space: nowrap; /* Mencegah pemisahan kata pada tanggal */
 }
 
 .table th {
@@ -172,6 +169,7 @@ body {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -181,6 +179,7 @@ body {
   from {
     transform: translateY(-20px);
   }
+
   to {
     transform: translateY(0);
   }
@@ -253,197 +252,4 @@ p {
 .crud-item .btn-container {
   display: flex;
   justify-content: flex-end;
-}
-
-.crud-item .btn-container .btn {
-  margin-left: 10px;
-}
-
-/* Custom Styles for Add/Edit Produk Form */
-
-.add-edit-form .form-group label {
-  font-size: 18px;
-}
-
-.add-edit-form .form-group input[type="text"],
-.add-edit-form .form-group input[type="number"],
-.add-edit-form .form-group input[type="date"],
-.add-edit-form .form-group select,
-.add-edit-form .form-group textarea {
-  font-size: 16px;
-  padding: 12px;
-}
-
-.add-edit-form .btn-container .btn {
-  font-size: 16px;
-  padding: 12px 20px;
-}
-
-/* Custom Styles for Table */
-
-.table-container {
-  overflow-x: auto;
-}
-
-/* Custom Styles for Buttons */
-
-.btn {
-  display: inline-block;
-  font-size: 16px;
-  font-weight: bold;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  margin-bottom: 10px;
-}
-
-.btn-primary {
-  background-color: #007bff;
-  color: #fff;
-}
-
-.btn-primary:hover {
-  background-color: #0056b3;
-  transform: translateY(-2px);
-}
-
-.btn-secondary {
-  background-color: #6c757d;
-  color: #fff;
-}
-
-.btn-secondary:hover {
-  background-color: #545b62;
-  transform: translateY(-2px);
-}
-
-.btn-danger {
-  background-color: #dc3545;
-  color: #fff;
-}
-
-.btn-danger:hover {
-  background-color: #c82333;
-  transform: translateY(-2px);
-}
-
-.btn-back {
-  background-color: #6c757d;
-  color: #fff;
-}
-
-.btn-back:hover {
-  background-color: #545b62;
-  transform: translateY(-2px);
-}
-
-/* Custom Styles for Table */
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 30px;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.table th,
-.table td {
-  padding: 12px;
-  border: 1px solid #dee2e6;
-}
-
-.table th {
-  background-color: #f0f0f0;
-  font-weight: bold;
-  text-align: left;
-}
-
-.table tbody tr:hover {
-  background-color: #f9f9f9;
-}
-
-/* Custom Styles for Form */
-
-.form-group input[type="text"],
-.form-group input[type="number"],
-.form-group input[type="date"],
-.form-group select,
-.form-group textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  transition: border-color 0.2s ease;
-}
-
-.form-group input[type="text"]:focus,
-.form-group input[type="number"]:focus,
-.form-group input[type="date"]:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-  border-color: #007bff;
-}
-
-.form-group select {
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000000'%3E%3Cpath d='M12 16.25l-6.25-5.5h12.5zm0-11l-6.25 5.5h12.5z'%3E%3C/path%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 8px center;
-  padding-right: 32px;
-}
-
-.form-group textarea {
-  resize: vertical;
-}
-
-/* Custom Styles for Alerts */
-
-.alert {
-  padding: 10px;
-  border-radius: 5px;
-  margin-bottom: 20px;
-}
-
-.alert-danger {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-}
-
-.alert-success {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-}
-
-/* Custom Animation */
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideInDown {
-  from {
-    transform: translateY(-20px);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
-.fadeIn {
-  animation: fadeIn 0.5s;
-}
-
-.slideInDown {
-  animation: slideInDown 0.5s;
 }
